@@ -81,6 +81,7 @@ namespace IVoice.Controllers
                     {
                         //creat cookie
                         await signInManager.SignInAsync(userModel, false);
+                        
                         return RedirectToAction("Index", "Home");
                     }
                 }

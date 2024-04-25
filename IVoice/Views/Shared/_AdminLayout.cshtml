@@ -21,40 +21,77 @@
 
     <link rel="stylesheet" href="~/sweetalert2/sweetalert2.min.css" />
 </head>
-<body>
-    <div class="herro_area">
+<body class="sub_page">
+    <div class="hero_area">
         <!-- header section strats -->
-        <header class="header">
-            <div class="container-two">
-                <nav class="navbar navbar-expand-lg custom_nav-container">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                        <span>
-                            IVOICE
-                        </span>
-                    </a>
-                    @if (User.Identity.IsAuthenticated == true)
+        <header class="header_section">
+            <div class="container-fluid">
+                <nav class="navbar navbar-expand-lg custom_nav-container ">
+                    @if (User.IsInRole("Admin"))
                     {
-
-                        <ul class="navbar-nav  ">
-                            <li class="nav-item active">
-                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home <span class="sr-only">(current)</span></a>
-
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Product" asp-action="Index">Products <span class="sr-only">(current)</span></a>
-
-                            </li>
-                        </ul>
+                        <a class="navbar-brand" asp-controller="Home" asp-action="dashboard">
+                            <span>
+                                IVOICE
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                            <span>
+                                IVOICE
+                            </span>
+                        </a>
                     }
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class=""> </span>
                     </button>
 
-
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav  ">
-                        </ul>
+                        @if (User.Identity.IsAuthenticated == true)
+                        {
+                            <ul class="navbar-nav  ">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                  
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Home" asp-action="dashboard">Home</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                                    </li>
+                                }
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Product" asp-action="Index"> Products</a>
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Role" asp-action="Index">Roles</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Product" asp-action="Products">Manage Products</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Home" asp-action="Contactus"> Contact us</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Home" asp-action="aboutus"> About us</a>
+
+                                    </li>
+                                }
+
+
+
+                            </ul>
+                        }
                         <div class="quote_btn-container">
                             <ul class="navbar-nav  ">
                                 @if (User.Identity.IsAuthenticated == false)
@@ -84,6 +121,7 @@
                                                 </svg>
                                             </a>
                                         </li>
+
                                     }
                                     <span style="margin-right: 10px;"></span>
                                     <li class="nav-item">
@@ -103,21 +141,20 @@
                                         </li>
                                     }
                                 }
-
                             </ul>
-
                         </div>
                     </div>
                 </nav>
             </div>
         </header>
-
+        <!-- end header section -->
+    </div>
         <!-- end header section -->
         <div>
             @RenderBody()
         </div>
 
-    </div>
+  
     <footer class="footer_section">
         <div class="container">
             <p>

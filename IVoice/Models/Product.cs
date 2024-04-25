@@ -10,6 +10,7 @@ namespace IVoice.Models
         public string Description { get; set; }
         [Required]
         public double Price { get; set; }
+        public int Quantity { get; set; }
         [MaxLength(500)]
         public string Cover { get; set; } = string.Empty;
         public List<OrderDetail> OrderDetail { get; set; }

@@ -29,6 +29,7 @@ namespace IVoice.Reopsitories
                                      Price = product.Price,
                                      Description = product.Description,
                                      Cover= product.Cover,
+                                     Quantity = product.Quantity,
                                  }).ToListAsync();
 
             return products;
@@ -55,6 +56,7 @@ namespace IVoice.Reopsitories
                 Description = vm.Description,
                 Price = vm.Price,
                 Cover = coverName,
+                Quantity=vm.Quantity
             };
 
             dbContext.Add(product);
@@ -74,6 +76,7 @@ namespace IVoice.Reopsitories
             product.Name = updateProduct.Name;
             product.Description = updateProduct.Description;
             product.Price = updateProduct.Price;
+            product.Quantity = updateProduct.Quantity;
 
             if (hasNewCover)
             {

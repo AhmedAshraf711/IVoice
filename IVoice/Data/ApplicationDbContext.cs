@@ -16,6 +16,8 @@ namespace IVoice.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderStatus> orderStatuses { get; set; }
+        public DbSet<Contactus> contactus { get; set; }
+        public DbSet<Admindraft>  admindrafts { get; set; }
 
 
     }

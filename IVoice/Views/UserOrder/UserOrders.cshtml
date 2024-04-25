@@ -55,7 +55,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="h5" style="border-bottom: 0;">OrderDate</th>
-                                        <th scope="col" style="border-bottom: 0;">OrderStatus</th>
+                                      @*   <th scope="col" style="border-bottom: 0;">OrderStatus</th> *@
                                     </tr>
                                 </thead>
                                 <tbody style="background-color:transparent">
@@ -63,7 +63,7 @@
                                     {
                                         <tr>             
                                             <td class="align-middle"><p class="mb-0" style="font-weight: bold;" style="border-bottom-width: 0;">@order.CreateDate.ToString("dd-MM-yyyy")</p></td>
-                                            <td class="align-middle"><p class="mb-0" style="font-weight: bold;" style="border-bottom-width: 0;">@order.OrderStatus.StatusName </p></td>
+                                           @*  <td class="align-middle"><p class="mb-0" style="font-weight: bold;" style="border-bottom-width: 0;">@order.OrderStatus.StatusName </p></td> *@
                                         </tr>
                                     
                                     @if (order.OrderDetail != null && order.OrderDetail.Count > 0)
@@ -82,7 +82,7 @@
                                                         <tr>
                                                             <th scope="col" style="border-bottom: 0;">product</th>
                                                             <th scope="col" style="border-bottom: 0;">Image</th>
-                                                            <th scope="col" style="border-bottom: 0;">Unit Price(INR)</th>
+                                                            <th scope="col" style="border-bottom: 0;">Unit Price($)</th>
                                                             <th scope="col" style="border-bottom: 0;">Total Price</th>
                                                         </tr>
                                                         @foreach (var item in order.OrderDetail)
@@ -119,7 +119,7 @@
                     {
                         <div class="alert alert-warning mt-5">
                             <h4 class="alert-heading">  No orders <i class="bi bi-x-square"></i></h4>
-                            <p class="mb-0">No orders have were made yet.</p>
+                            <p class="mb-0">No orders have been made yet.</p>
                         </div>
                     }
                 </div>

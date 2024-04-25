@@ -35,9 +35,11 @@ namespace IVoice
             builder.Services.AddTransient<IProduct, ProductRepo>();
             builder.Services.AddTransient<ICartRepository, CartRepository>();
             builder.Services.AddTransient<IUserOrderRepository, UserOrderRepository>();
+            builder.Services.AddTransient<IAdminRepository, AdminRepository>();
+            builder.Services.AddTransient<IHome, HomeRepo>();
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
             builder.Configuration.GetValue<string>("StripeSettings:SecretKey");
-            builder.Services.AddHostedService<OrderStatusUpdaterService>();
+            //builder.Services.AddHostedService<OrderStatusUpdaterService>();
           
 
             var app = builder.Build();

@@ -5,6 +5,9 @@ using Stripe.Checkout;
 using Stripe;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using IVoice.ViewModel;
+using IVoice.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace IVoice.Controllers
 {
@@ -13,17 +16,71 @@ namespace IVoice.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly StripeSettings _stripeSettings;
+        private ApplicationDbContext context;
+        IAdminRepository adminRepository;
 
-        public HomeController(IOptions<StripeSettings> stripeSettings, ILogger<HomeController> logger)
+        private readonly IHome home;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public HomeController(IOptions<StripeSettings> stripeSettings, ILogger<HomeController> logger,ApplicationDbContext context,IHome home,UserManager<ApplicationUser> userManager, IAdminRepository adminRepository)
         {
             _stripeSettings = stripeSettings.Value;
             _logger = logger;
+            this.context = context;
+            this.home = home;
+            _userManager = userManager;
+            this.adminRepository = adminRepository;
+        }
+        
+        public IActionResult dashboard()
+        {
+            ViewBag.productcount=context.products.Count();
+            ViewBag.ordercount=context.Orders.Count();
+            ViewBag.usercount=context.Users.Count();
 
+            //var currentUser = _userManager.GetUserAsync(User).Result; // Get the current user
+            //var allUsersExceptCurrentUser = _userManager.Users.Where(u => u.Id != currentUser.Id).ToList();
+
+            //ViewBag.Users = allUsersExceptCurrentUser;
+            ViewBag.Users = adminRepository.UsersDisplay();
+
+            var orders = adminRepository.OrdersDisplay();
+            return View(orders);
+            
+        }
+        [HttpPost]
+        public IActionResult dashboard(Admindraft admindraft)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            context.admindrafts.Add(admindraft);
+            context.SaveChanges();
+            return View();
         }
         public IActionResult Index()
         {
             return View();
         }
+       
+        public IActionResult Contactus()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ContactusAsync(ContactUsViewModel contactusvm)
+        {
+           
+            if (!ModelState.IsValid)
+            {
+                return View(contactusvm);
+            }
+            await home.newcontactus(contactusvm);
+            return RedirectToAction(nameof(Index));
+        }
+
+
 
         public IActionResult AboutUs()
         {

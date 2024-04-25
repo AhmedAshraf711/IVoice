@@ -1,0 +1,228 @@
+﻿@model List<OrdersDisplayModel>
+@{
+    Layout = null;
+   
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+  
+    <link href="~/css/all.min.css" rel="stylesheet" />
+   
+    <link href="~/css/framework.css" rel="stylesheet" />
+   
+    <link href="~/css/master.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <style>
+        /* Styling for notification list */
+        #notificationList {
+            position: absolute;
+            top: calc(100% - 10px); /* Position slightly above the icon */
+            right: 0;
+            background-color: #fff;
+            border: 2px solid #007bff; /* Change border style here */
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px; /* Increase padding to accommodate the arrow */
+            width: fit-content;
+            z-index: 1000; /* Ensure it appears above other elements */
+            display: none; /* Hide by default */
+        }
+
+            #notificationList.active {
+                display: block; /* Show when active */
+            }
+
+            #notificationList::before {
+                content: "";
+                border-width: 8px;
+                border-style: solid;
+                border-color: transparent transparent #000 transparent; /* Arrow color */
+                position: absolute;
+                left: 20px; /* Adjust position as needed */
+                top: -19px; /* Adjust position as needed */
+            }
+
+            #notificationList li {
+                list-style-type: none;
+                margin-bottom: 10px; /* Increased margin */
+                position: relative; /* Position relative for pseudo-element */
+            }
+
+                #notificationList li .product-name {
+                    display: block;
+                    margin-bottom: 5px;
+                }
+
+                #notificationList li a.update-link {
+                    display: block;
+                    color: #007bff;
+                    text-decoration: none;
+                }
+
+                    #notificationList li a.update-link:hover {
+                        text-decoration: underline;
+                    }
+
+        /* Positioning for dropdown relative to icon */
+        .navbar-nav .nav-item {
+            position: relative;
+        }
+
+        /* Position the notification list relative to the icon */
+        .navbar-nav #notificationList {
+            position: absolute;
+            top: calc(100% + 5px);
+            right: 0;
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="page d-flex">
+        <div class="sidebar bg-white p-20 p-relative">
+            <h3 class="p-relative txt-c mt-0">IVOICE</h3>
+            <ul>
+                <li>
+                    <a class="active d-flex align-center fs-14 c-black rad-6 p-10" asp-action="dashboard" asp-controller="Home">
+                        <i class="fa-regular fa-chart-bar fa-fw"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-flex align-center fs-14 c-black rad-6 p-10" asp-action="Index" asp-controller="Product">
+                        <i class="fa-solid fa-dice-d6 fa-fw"></i>
+                        <span>Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-flex align-center fs-14 c-black rad-6 p-10" asp-action="Products" asp-controller="Product">
+                        <i class="fa-solid fa-screwdriver-wrench fa-fw"></i>
+                        <span>Manage Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-flex align-center fs-14 c-black rad-6 p-10" asp-action="Index" asp-controller="Role">
+                        <i class="fa-solid fa-circle-nodes fa-fw"></i>
+                        <span>Roles</span>
+                    </a>
+                </li>
+         
+             
+            </ul>
+        </div>
+        <div class="content w-full">
+            <!-- Start Head -->
+            <div class="head bg-white p-15 between-flex">
+                <div class="quote_btn-container">
+                </div>
+                <div class="icons d-flex align-center">
+                    <span class="notification p-relative">
+                        <i class="fa-regular fa-bell fa-lg"></i>
+                    </span>
+         
+                    <div class="quote_btn-container">
+                        <a asp-controller="Account" asp-action="Logout" class="quote_btn ">
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- End Head -->
+            <h1 class="p-relative">Dashboard</h1>
+            <div class="wrapper d-grid gap-20">
+                <!-- Start Welcome Widget -->
+                <div class="welcome bg-white rad-10 txt-c-mobile block-mobile">
+                    <div class="intro p-20 d-flex space-between bg-eee">
+                        <div>
+                            <h2 class="m-0">Welcome</h2>
+                            <p class="c-grey mt-5">Admin</p>
+                        </div>
+                        <img class="hide-mobile" src="~/imgs/welcome.png" alt="" />
+                    </div>
+                    <img src="~/imgs/avatar.png" alt="" class="avatar" />
+                    <div class="body txt-c d-flex p-20 mt-20 mb-20 block-mobile">
+                        <div>@ViewBag.productcount<span class="d-block c-grey fs-14 mt-10">Products</span></div>
+                        <div>@ViewBag.ordercount <span class="d-block c-grey fs-14 mt-10">Orders</span></div>
+                        <div>@ViewBag.usercount<span class="d-block c-grey fs-14 mt-10">Users</span></div>
+
+                    </div>
+
+                </div>
+                <!-- End Welcome Widget -->
+                <!-- Start Quick Draft Widget -->
+          
+            </div>
+            <!-- End Quick Draft Widget -->
+            <!-- Start Projects Table -->
+            <div class="projects p-20 bg-white rad-10 m-20">
+                <h2 class="mt-0 mb-20">Client Information</h2>
+                <div class="responsive-table">
+                    <table class="fs-15 w-full">
+                        <thead>
+                            <tr>
+                                <td>Client Name</td>
+                                <td>Email</td>
+                                <td>Addres</td>
+                                <td>Number Of Orders</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Users)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Address</td>
+                                    <td>@item.OrdersCount</td>
+                                </tr>
+                            }
+                       
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- End Projects Table -->
+
+            </div>
+            <div class="projects p-20 bg-white rad-10 m-20">
+                <h2 class="mt-0 mb-20">Order Information</h2>
+                <div class="responsive-table">
+                    <table class="fs-15 w-full">
+                        <thead>
+                            <tr>
+                                <td>Client Name</td>
+
+                                <td>Ordered At</td>
+                                <td>Order Id</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.UserName</td>
+                                   
+                                    <td>@item.CreatedAt</td>
+                                     <td>@item.OrderId</td>
+                                
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- End Projects Table -->
+        </div>
+    </div>
+ 
+</body>
+</html>

@@ -80,7 +80,8 @@ namespace IVoice.Controllers
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
-                CurrentCover = product.Cover
+                CurrentCover = product.Cover,
+                Quantity = product.Quantity,
             };
 
             return View(updateProduct);

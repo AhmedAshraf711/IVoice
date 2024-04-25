@@ -16,6 +16,7 @@
 </head>
 
 <body>
+    <div class="herro_area">
     <!-- Start Articles -->
     <div class="articles" id="articles">
         <h2 class="main-title">PRODUCTS</h2>
@@ -33,7 +34,18 @@
                 </form>
             </div>
         </div>
+        @if (!Model.products.Any())
+        {
+            <div class="alert alert-warning mt-5" style="left: 50%;transform: translate(-50%, 0%);width: 900px;color: black;background-color: white;border-color: white;">
+                <h4 class="alert-heading" style="font-weight:500"> Empty <i class="bi bi-exclamation-triangle"></i></h4>
+                <p class="mb-0">We apologize for this, products will be added soon</p>
+            </div>
+        }
+          else
+            {
         <div class="container">
+        
+          
             @foreach (var product in Model.products)
             {
                 <div class="box">
@@ -46,8 +58,8 @@
                         <img style="width:100%;height:180px" src="/images/@product.Cover" class="card-img-top" alt="...">
                     }
                     <div class="content">
-                       <b><h4>@product.Name</h4></b> 
-                        <b>Price: </b>@product.Price<br />
+                       <h4 style="font-weight:bold">@product.Name</h4>
+                            <b>Price: </b><b>@product.Price$</b><br />
                         <b>Description: </b> @(product.Description.Length > 75 ? $"{product.Description.Substring(0, 75)}..." : product.Description)
                     </div>
                     <div class="info">
@@ -60,7 +72,10 @@
                     </div>
                 </div>
             }
+            
         </div>
+        }
+    </div>
     </div>
     <div class="spikes"></div>
     <!-- End Articles -->

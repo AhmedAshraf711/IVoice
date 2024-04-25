@@ -9,6 +9,7 @@ namespace IVoice.ViewModel
         public string Description { get; set; }
         public double Price { get; set; }
         public string? CurrentCover { get; set; }
+        public int Quantity { get; set; }
 
         [AllowedExtension(FileSettings.AllowedExtensions)]
         [MaxFileSize(FileSettings.MaxFileSizeInBytes * 1024)]

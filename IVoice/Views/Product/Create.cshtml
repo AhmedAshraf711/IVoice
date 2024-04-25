@@ -1,12 +1,11 @@
-﻿
-@model IVoice.ViewModel.ProductViewModel
+﻿@model IVoice.ViewModel.ProductViewModel
 @{
     ViewData["Title"] = "Create Product";
     Layout = "~/Views/Shared/_NewCustomLayout.cshtml";
 }
- 
+
 <head>
-  
+
     <style>
 
         textarea.form-control:focus, input.form-control:focus {
@@ -16,15 +15,19 @@
     </style>
 </head>
 <body>
-    <div class="herro_area">
+ 
         <div class="create">
             <div class="create-container">
-               @*  <h2 class="main-title">Create</h2> *@
+                <br />
+                <h2 class="main-title">Create Page</h2>
             </div>
         </div>
-       
-        <div id="row">
-            <div class="col-md-4">
+     
+         
+
+        
+        <section class="row justify-content-between">
+            <div class="col-md-4" style="margin-left:30px">
                 <div>
                     <div>
                         <form style="background-color: white;" asp-action="Create" method="post" enctype="multipart/form-data">
@@ -38,7 +41,11 @@
                                 <textarea asp-for="Description" style="resize: none; height: 130px;" class="form-control"></textarea>
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
-
+                        <div class="form-group">
+                            <label asp-for="Quantity" class="control-label">Quantity</label>
+                            <input asp-for="Quantity" class="form-control" />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
                             <div class="form-group">
                                 <label asp-for="Price" class="control-label">Price</label>
                                 <input asp-for="Price" class="form-control" />
@@ -56,45 +63,44 @@
                                 <span asp-validation-for="ImageFile" class="text-danger d-block"></span>
                             </div>
                             <div class="form-group">
-                                <div id="butt" style=" margin-left:85px;">
+                                <div id="butt">
                                     <input type="submit" class="buttons" value="Create" />
-                            
+
                                 </div>
                             </div>
-
-                            
                         </form>
                         <div class="col-md-4">
-                            <div id="Poster-container">
-                            <img class="cover-preview d-none" alt="ImageFile" />
-                             
+                            <div id="Poster-container" class="poster-container">
+                                <img class="cover-preview d-none" alt="ImageFile" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+    < 
+            <div>
+            </div>
+        
+  
 
-        <div>
-        </div>
-    </div>
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+            <script src="~/js/filesize-validator.js" asp-append-version="true"></script>
+            <script src="~/js/game-form.js" asp-append-version="true"></script>
 
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-        <script src="~/js/filesize-validator.js" asp-append-version="true"></script>
-        <script src="~/js/game-form.js" asp-append-version="true"></script>
-
-        <script>
-            $.validator.addMethod('filesize', function (value, element, param) {
-                return this.optional(element) || element.files[0].size <= param;
-            });
-
-            $(document).ready(function () {
-                $('#ImageFile').on('change', function () {
-                    $('.cover-preview').attr('src', window.URL.createObjectURL(this.files[0])).removeClass('d-none');
+            <script>
+                $.validator.addMethod('filesize', function (value, element, param) {
+                    return this.optional(element) || element.files[0].size <= param;
                 });
-            });
-        </script>
-    }
+
+                $(document).ready(function () {
+                    $('#ImageFile').on('change', function () {
+                        $('.cover-preview').attr('src', window.URL.createObjectURL(this.files[0])).removeClass('d-none');
+                    });
+                });
+            </script>
+        }
 
 </body>
- 
+

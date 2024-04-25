@@ -538,3 +538,12 @@ a:focus {
         width: 255px;
     }
 }
+
+#alert{
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 900px;
+    color: black;
+    background-color: white;
+    border-color: white;
+}
