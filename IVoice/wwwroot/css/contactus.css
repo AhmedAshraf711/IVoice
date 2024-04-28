@@ -5,6 +5,10 @@
     margin: 0 auto; /* Center the image horizontally */
     margin-top:30px;
   }
+
+textarea {
+    resize: none;
+}
 .herro_area {
     position: relative;
     min-height: 100vh;
@@ -37,6 +41,10 @@
     .img-box img {
       display: none; /* Reduce image size for larger screens */
     }
+    textarea {
+        width: 370px;
+    }
+
   }
   
   
@@ -44,12 +52,20 @@
   @media (max-width: 768px) {
     .img-box img {
       display: none; /* Reduce image size for larger screens */
+
     }
+    textarea {
+        width: 720px;
+    }
+
   }
   @media (max-width: 992px) {
     .img-box img {
       max-width: 110%;
       margin-top: 100px; /* Reduce image size for larger screens */
+    }
+    textarea {
+        width: 295.66px;
     }
   }
   @media (max-width: 1120px) {
@@ -57,4 +73,8 @@
       max-width: 110%;
       margin-top: 100px; /* Reduce image size for larger screens */
     }
+    textarea {
+        width: 385.8px;
+    }
   }
+

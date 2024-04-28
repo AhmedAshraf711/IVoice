@@ -31,7 +31,26 @@ namespace IVoice.Controllers
             _userManager = userManager;
             this.adminRepository = adminRepository;
         }
-        
+
+        public IActionResult GetUserFeadback()
+        {
+            
+            return View(context.contactus.ToList());
+        }
+        public IActionResult RedirectBasedOnRole()
+        {
+
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Dashboard", "Home");
+            }
+            else if (User.IsInRole("User"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Login", "Account");
+        }
         public IActionResult dashboard()
         {
             ViewBag.productcount=context.products.Count();
@@ -59,6 +78,7 @@ namespace IVoice.Controllers
             context.SaveChanges();
             return View();
         }
+ 
         public IActionResult Index()
         {
             return View();

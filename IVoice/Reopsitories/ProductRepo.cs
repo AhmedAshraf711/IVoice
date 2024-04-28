@@ -20,7 +20,7 @@ namespace IVoice.Reopsitories
         public async Task<IEnumerable<Product>> GetProducts(string sTerm = "")
         {
             sTerm = sTerm.ToLower();
-            var products= await (from product in dbContext.products
+            var products = await (from product in dbContext.products.Where(p => p.Quantity>0)
                                  where string.IsNullOrWhiteSpace(sTerm) || (product != null && product.Name.ToLower().StartsWith(sTerm))
                                  select new Product
                                  {

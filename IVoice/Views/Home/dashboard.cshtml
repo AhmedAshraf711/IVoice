@@ -1,7 +1,7 @@
 ﻿@model List<OrdersDisplayModel>
 @{
     Layout = null;
-   
+
 }
 
 <!DOCTYPE html>
@@ -10,11 +10,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-  
+
     <link href="~/css/all.min.css" rel="stylesheet" />
-   
+
     <link href="~/css/framework.css" rel="stylesheet" />
-   
+
     <link href="~/css/master.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,6 +23,9 @@
     <style>
         /* Styling for notification list */
         #notificationList {
+            list-style-type: none; /* Remove bullet points */
+            padding-left: 0; /* Remove left padding */
+
             position: absolute;
             top: calc(100% - 10px); /* Position slightly above the icon */
             right: 0;
@@ -42,15 +45,16 @@
 
             #notificationList::before {
                 content: "";
-                border-width: 8px;
+                border-width: 10px;
                 border-style: solid;
                 border-color: transparent transparent #000 transparent; /* Arrow color */
                 position: absolute;
-                left: 20px; /* Adjust position as needed */
+                right: 17px; /* Adjust position as needed */
                 top: -19px; /* Adjust position as needed */
             }
 
             #notificationList li {
+
                 list-style-type: none;
                 margin-bottom: 10px; /* Increased margin */
                 position: relative; /* Position relative for pseudo-element */
@@ -88,6 +92,7 @@
 </head>
 <body>
     <div class="page d-flex">
+    
         <div class="sidebar bg-white p-20 p-relative">
             <h3 class="p-relative txt-c mt-0">IVOICE</h3>
             <ul>
@@ -115,8 +120,13 @@
                         <span>Roles</span>
                     </a>
                 </li>
-         
-             
+
+                <li>
+                    <a class="d-flex align-center fs-14 c-black rad-6 p-10" asp-action="GetUserFeadback" asp-controller="Home">
+                        <i class="fa-solid fa-comments fa-fw"></i>
+                        <span>FeedBacks</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="content w-full">
@@ -125,10 +135,23 @@
                 <div class="quote_btn-container">
                 </div>
                 <div class="icons d-flex align-center">
-                    <span class="notification p-relative">
+                @*     <span class="notification p-relative">
                         <i class="fa-regular fa-bell fa-lg"></i>
-                    </span>
-         
+                    </span> *@
+                    <div class="navbar-nav">
+                        <!-- Other navbar items -->
+                        <!-- Notification icon -->
+                        <li class="nav-item" >
+                            <a id="notificationIcon" class="nav-link" href="#">
+                                <i class="fa-regular fa-bell fa-lg"></i>
+                                <span id="notificationCounter" class="counter"></span> <!-- Add this span -->
+                                <ul id="notificationList" class="dropdown-menu" style="display: none;">
+                                    <!-- Notification items will be dynamically added here -->
+                                </ul>
+                            </a>
+                        </li>
+                    </div>
+
                     <div class="quote_btn-container">
                         <a asp-controller="Account" asp-action="Logout" class="quote_btn ">
                             Logout
@@ -159,7 +182,7 @@
                 </div>
                 <!-- End Welcome Widget -->
                 <!-- Start Quick Draft Widget -->
-          
+
             </div>
             <!-- End Quick Draft Widget -->
             <!-- Start Projects Table -->
@@ -185,7 +208,7 @@
                                     <td>@item.OrdersCount</td>
                                 </tr>
                             }
-                       
+
                         </tbody>
                     </table>
                 </div>
@@ -210,10 +233,10 @@
                             {
                                 <tr>
                                     <td>@item.UserName</td>
-                                   
+
                                     <td>@item.CreatedAt</td>
-                                     <td>@item.OrderId</td>
-                                
+                                    <td>@item.OrderId</td>
+
                                 </tr>
                             }
                         </tbody>
@@ -223,6 +246,80 @@
             <!-- End Projects Table -->
         </div>
     </div>
- 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize notification counter
+            var notificationCounter = 0;
+
+            // Function to update notification counter
+            function updateNotificationCounter(count) {
+                // Update counter display
+                $('#notificationCounter').text(count);
+            }
+
+            // Fetch notifications and update counter
+            $.ajax({
+                url: '@Url.Action("OutOfStock", "Admin")',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var $notificationList = $('#notificationList');
+                    $notificationList.empty();
+                    $.each(data, function (index, item) {
+                        // Construct list item with product name and update button
+                        var listItem = '<li>' + item.name + ' <a class="update-link" href="@Url.Action("Update", "Product")/' + item.id + '">Update</a></li>';
+                        $notificationList.append(listItem);
+                        // Increment notification counter
+                        notificationCounter++;
+                    });
+                    // Update counter display with the actual count
+                    updateNotificationCounter(notificationCounter);
+
+                    // Check if the count of out-of-stock products is zero
+                    if (notificationCounter === 0) {
+                        // If zero, make the icon non-clickable
+                        $('#notificationIcon').off('click');
+                        $('#notificationIcon').css('pointer-events', 'none');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert('Error occurred while fetching data: ' + error);
+                }
+            });
+
+            $('#notificationIcon').click(function (e) {
+                e.preventDefault(); // Prevent default action of anchor tag
+
+                // Check if the list is visible
+                var $notificationList = $('#notificationList');
+                if ($notificationList.is(':visible')) {
+                    // If the list is visible, hide it
+                    $notificationList.hide();
+                } else {
+                    // If the list is not visible, toggle its visibility
+                    $notificationList.toggleClass('active').show();
+                }
+            });
+
+            $(document).mouseup(function (e) {
+                if (!$('#notificationIcon').is(e.target) && $('#notificationList').is(':visible')) {
+                    $('#notificationList').hide(); // Hide the list when clicking outside of it
+                }
+            });
+
+            // Handle click event on update links
+            $(document).on('click', '.update-link', function (e) {
+                e.preventDefault(); // Prevent default action of anchor tag
+                var updateUrl = $(this).attr('href');
+                // Redirect to the update URL
+                window.location.href = updateUrl;
+            });
+        });
+
+
+    </script>
+
 </body>
 </html>

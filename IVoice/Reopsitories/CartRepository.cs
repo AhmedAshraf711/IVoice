@@ -34,7 +34,8 @@ namespace IVoice.Reopsitories
             try
             {
                 if (string.IsNullOrEmpty(userId))
-                    throw new Exception("user is not logged-in");
+                    throw new Exception("User is not logged in.");
+
                 var cart = await GetCart(userId);
                 if (cart is null)
                 {
@@ -43,78 +44,88 @@ namespace IVoice.Reopsitories
                         UserId = userId
                     };
                     _db.ShoppingCarts.Add(cart);
+                    await _db.SaveChangesAsync(); // Save changes to generate cart ID
                 }
-                _db.SaveChanges();
-                // cart detail section
-                var cartItem = _db.CartDetails
-                                  .FirstOrDefault(a => a.ShoppingCartId == cart.Id && a.ProductId == productId);
+
+                var product = await _db.products.FindAsync(productId);
+                if (product is null)
+                    throw new Exception("Product not found.");
+
+                // Check if the product is already in the cart
+                var cartItem = _db.CartDetails.FirstOrDefault(a => a.ShoppingCartId == cart.Id && a.ProductId == productId);
                 if (cartItem is not null)
                 {
+                    // Check if increasing the quantity exceeds the available quantity
+                    if (cartItem.Quantity + qty > product.Quantity)
+                    {
+                        throw new Exception("Quantity exceeds available stock.");
+                    }
+                    // Update quantity
                     cartItem.Quantity += qty;
                 }
                 else
                 {
-                    var product = _db.products.Find(productId);
+                    // Add new item to the cart
                     cartItem = new CartDetail
                     {
                         ProductId = productId,
                         ShoppingCartId = cart.Id,
                         Quantity = qty,
-                        UnitPrice=product.Price
-                      
-                        
+                        UnitPrice = product.Price
                     };
                     _db.CartDetails.Add(cartItem);
                 }
-                _db.SaveChanges();
+
+                await _db.SaveChangesAsync(); // Save changes to update cart items
                 transaction.Commit();
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
+                // Handle exception
             }
+
             var cartItemCount = await GetCartItemCount(userId);
             return cartItemCount;
         }
 
         public async Task<int> RemoveItem(int productId)
         {
-            //using var transaction = _db.Database.BeginTransaction();
             string userId = GetUserId();
             try
             {
                 if (string.IsNullOrEmpty(userId))
-                    throw new Exception("user is not logged-in");
+                    throw new Exception("User is not logged in.");
+
                 var cart = await GetCart(userId);
                 if (cart is null)
-                    throw new Exception("Invalid cart");
-                // cart detail section
-                var cartItem = _db.CartDetails
-                                  .FirstOrDefault(a => a.ShoppingCartId == cart.Id && a.ProductId == productId);
+                    throw new Exception("Invalid cart.");
+
+                // Check if the product is in the cart
+                var cartItem = _db.CartDetails.FirstOrDefault(a => a.ShoppingCartId == cart.Id && a.ProductId == productId);
                 if (cartItem is null)
-                    throw new Exception("Not items in cart");
-                else if (cartItem.Quantity == 1)
+                    throw new Exception("Item not found in cart.");
+
+                if (cartItem.Quantity == 1)
+                {
+                    // Remove item from cart if quantity becomes zero
                     _db.CartDetails.Remove(cartItem);
+                }
                 else
-                    cartItem.Quantity = cartItem.Quantity - 1;
-                _db.SaveChanges();
+                {
+                    // Decrement quantity
+                    cartItem.Quantity -= 1;
+                }
+
+                await _db.SaveChangesAsync(); // Save changes to update cart items
             }
             catch (Exception ex)
             {
-
+                // Handle exception
             }
+
             var cartItemCount = await GetCartItemCount(userId);
             return cartItemCount;
-        }
-        public async Task<ShoppingCart> GetUserCart()
-        {
-            var userId = GetUserId();
-            if (userId == null)
-                throw new Exception("Invalid userid");
-            var shoppingCart= await _db.ShoppingCarts
-                                     .Include(a => a.CartDetails)
-                                     .ThenInclude(a => a.product)
-                                     .Where(a => a.UserId == userId).FirstOrDefaultAsync();
-            return shoppingCart;
         }
 
         public async Task<int> GetCartItemCount(string userId = "")
@@ -162,12 +173,18 @@ namespace IVoice.Reopsitories
                 {
                     var orderDetail = new OrderDetail
                     {
-                        ProductId= item.ProductId,
+                        ProductId = item.ProductId,
                         OrderId = order.Id,
                         Quantity = item.Quantity,
                         UnitPrice = item.UnitPrice
                     };
                     _db.OrderDetails.Add(orderDetail);
+                    var product = await _db.products.FindAsync(item.ProductId);
+                    if (product is null)
+                        throw new Exception("Product not found");
+                    if (product.Quantity < item.Quantity)
+                        throw new Exception("Insufficient quantity available");
+                    product.Quantity -= item.Quantity;
                 }
                 _db.SaveChanges();
 
@@ -236,6 +253,18 @@ namespace IVoice.Reopsitories
             var principal = _httpContextAccessor.HttpContext.User;
             string userId = _userManager.GetUserId(principal);
             return userId;
+        }
+
+        public async Task<ShoppingCart> GetUserCart()
+        {
+            var userId = GetUserId();
+            if (userId == null)
+                throw new Exception("Invalid userid");
+            var shoppingCart = await _db.ShoppingCarts
+                                     .Include(a => a.CartDetails)
+                                     .ThenInclude(a => a.product)
+                                     .Where(a => a.UserId == userId).FirstOrDefaultAsync();
+            return shoppingCart;
         }
     }
 }

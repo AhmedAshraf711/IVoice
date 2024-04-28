@@ -31,6 +31,15 @@
   <link href="~/css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="~/css/responsive.css" rel="stylesheet" />
+  <style>
+        textarea {
+            resize: none;
+            background-color:#eee;
+            height:120px;
+            width:465px;
+        }
+
+  </style>
    
 </head>
 
@@ -55,8 +64,8 @@
                         @if (User.Identity.IsAuthenticated == true)
                         {
                             <ul class="navbar-nav  ">
-                                <li class="nav-item active">
-                                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home<span class="sr-only">(current)</span></a>
+                                <li class="nav-item ">
+                                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Product" asp-action="Index"> Products</a>
@@ -173,9 +182,11 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                </div>
               <div>
-             <input asp-for="Feedback" class="message-box" placeholder="Message" required="required" />
+            <input asp-for="Feedback" class="message-box" placeholder="Message" required="required"/>
                <span asp-validation-for="Feedback" class="text-danger"></span>
               </div>
+ 
+
               <div class="d-flex">
                 <button type="submit">SEND</button>
               </div>

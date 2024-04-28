@@ -517,18 +517,22 @@ form {
         justify-content: flex-start;
         margin-top: 50px;
         margin-left: 0;
+
+    }
+    .footer_section p {
+        margin-top: 470px;
     }
 
     .cover-preview {
-        margin-top: 20px;
+        margin-top: 30px;
         margin-left: 0;
         position: absolute;
         border-radius: 10px;
         width: 100%;
         max-width: 100%;
         height: auto;
-        background-color: #eee; /* Adding background color /
-  }
+        background-color: #eee; /* Adding background color /*/
+    }
 
   .button-container {
     flex-direction: column;
@@ -546,16 +550,18 @@ form {
     margin-top: 50px;
     margin-left: 0;
   }
-
+    .footer_section p {
+        margin-top: 330px;
+    }
   .cover-preview {
-    margin-top: 20px;
+    margin-top: 30px;
     margin-left: 0;
     position: absolute;
     border-radius: 10px;
     width: 100%;
     max-width: 100%;
     height: auto;
-    background-color: #eee; / Adding background color */
+    background-color: #eee; 
     }
 
     .button-container {
@@ -565,5 +571,11 @@ form {
 
     .form-container {
         width: 100%;
+    }
+}
+@media (max-width: 480px) {
+    .footer_section p {
+        margin-top: 240px;
+        font-size: smaller;
     }
 }

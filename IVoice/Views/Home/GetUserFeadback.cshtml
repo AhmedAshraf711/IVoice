@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Contactus>
+@{
+    Layout = "~/Views/Shared/_NewLayout.cshtml";
+}
+<head>
+ 
+    <link href="~/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/framework.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+ 
+    <style>
+        ::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #7335b7;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background-color: #ab6eec;
+            }
+
+        .projects .responsive-table {
+            overflow-x: auto;
+        }
+
+        .projects table {
+            min-width: 1000px;
+            border-spacing: 0;
+        }
+
+        .projects thead td {
+            background-color: #eee;
+            font-weight: bold;
+        }
+
+        .projects table td {
+            padding: 15px;
+        }
+
+        .projects tbody td {
+            border-bottom: 1px solid #eee;
+            border-left: 1px solid #eee;
+            transition: 0.3s;
+        }
+
+        .projects table tbody tr td:last-child {
+            border-right: 1px solid #eee;
+        }
+
+        .projects tbody tr:hover td {
+            background-color: #faf7f7;
+        }
+
+        .projects table img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            padding: 2px;
+            background-color: white;
+        }
+
+            .projects table img:not(:first-child) {
+                margin-left: -20px;
+            }
+
+        .projects table .label {
+            font-size: 13px;
+        }
+
+        .message-textarea {
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 50px; /* Set minimum height */
+            width: 50%; /* Take up full width */
+        }
+        /* End Projects Table */
+
+    </style>
+</head>
+<body>
+ 
+        <div class="projects p-20 bg-white rad-10 m-20">
+            <h2 class="mt-0 mb-20">FeedBacks</h2>
+            <div class="responsive-table">
+                <table class="fs-15 w-full">
+                    <thead>
+                        <tr>
+                            <td>Full Name</td>
+                            <td>Email</td>
+                            <td>Phone Number</td>
+                            <td>The Message</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in Model)
+                        {
+                            <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Email</td>
+                            <td>@item.PhoneNumber</td>
+                            <td class="message-textarea" rows="2">
+                               @item.Feedback
+                            </td>
+                        </tr>
+                         }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+ 
+
+</body>
+ 

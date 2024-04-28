@@ -63,7 +63,7 @@ namespace IVoice.Controllers
                 return View(productViewModel);
             }
             await _product.AddProduct(productViewModel);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Products));
         }
         [HttpGet]
         [Authorize(Roles = "Admin")]
@@ -102,7 +102,7 @@ namespace IVoice.Controllers
             if (product is null)
                 return BadRequest();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Products));
         }
 
         [HttpDelete]

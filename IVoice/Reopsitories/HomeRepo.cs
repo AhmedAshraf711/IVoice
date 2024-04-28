@@ -26,5 +26,7 @@
             dbContext.Add(contactus);
             dbContext.SaveChanges();
         }
+
+
     }
 }
